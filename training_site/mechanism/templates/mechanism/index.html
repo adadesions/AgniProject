@@ -6,16 +6,17 @@
         <center>
             <h3>Control Panel</h3>
         </center><hr>
-        <form id="upload-form" action={% url 'training:upload' %} enctype="multipart/form-data" method="POST">
+        <form id="upload_form" action={% url 'machanism:index' %} enctype="multipart/form-data" method="POST">
         {% csrf_token %}
+        <!-- {{form}} -->
             <div class="form-group">
                 <label for="file_name">
                     <b>Filename</b>
                 </label>
-                <input type="text" readonly class="form-control-plaintext control-readonly" id="file_name" value="-">
+                <input type="text" readonly class="form-control-plaintext control-readonly" id="file_name" value={{filename}}>
             </div>
             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <input type="file" id="upload-input" name="upload-input" hidden>
+                <input type="file" id="id_file" name="file" hidden>
                 <button type="submit" id="upload-submit-btn"></button>
                 <button type="button" class="btn btn-primary ada-btn" onclick="clickUploadImage()">Upload...</button>
                 <button type="button" class="btn btn-danger ada-btn">Clear</button>

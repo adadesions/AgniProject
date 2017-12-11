@@ -1,15 +1,16 @@
+var upload_input = $('#id_file')
+
 function clickUploadImage() {
-    $('#upload-input').trigger('click')
+    upload_input.trigger('click')
 }
 
 function changingUploadInput() {
-    var upload_btn = $('#upload-submit-btn')
-    var upload_form = $('#upload-form')
-    upload_form.ajaxSubmit(function(){
-        console.log("OK")
+    $('#upload_form').ajaxSubmit(function(data){
+        console.log(data)
+        $('#file_name').val(data.filename)
     })
 }
 
-$('#upload-input').change(changingUploadInput)
+upload_input.change(changingUploadInput)
 
   

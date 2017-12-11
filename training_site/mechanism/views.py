@@ -1,18 +1,16 @@
 from django.shortcuts import render
-from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_protect
+from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-
-
-def index(req):
-    return render(req, 'mechanism/index.html')
+from .forms import UploadFileForm
 
 
 @csrf_exempt
-def upload(req):
+def index(req):
     if req.method == 'POST':
-        print("Cool!")
-        print(req.FILES)
-    else:
-        print('Booooo~')
-    return HttpResponse('I\'m Ada')
+        form = UploadFileForm(req.POST, req.FILES)
+        if form.is_valid():
+            filename = 'ada'
+            data = {'filename': req.FILES['file'].name}
+            return JsonResponse(data)
+
+    return render(req, 'mechanism/index.html', {'filename': '-'})
