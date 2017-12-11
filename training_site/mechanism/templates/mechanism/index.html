@@ -1,0 +1,31 @@
+{% extends "mechanism/_base.html" %}
+
+
+{% block control_panel %}
+    <div class="container ada-border">
+        <center>
+            <h3>Control Panel</h3>
+        </center><hr>
+        <form id="upload-form" action={% url 'training:upload' %} enctype="multipart/form-data" method="POST">
+        {% csrf_token %}
+            <div class="form-group">
+                <label for="file_name">
+                    <b>Filename</b>
+                </label>
+                <input type="text" readonly class="form-control-plaintext control-readonly" id="file_name" value="-">
+            </div>
+            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <input type="file" id="upload-input" name="upload-input" hidden>
+                <button type="submit" id="upload-submit-btn"></button>
+                <button type="button" class="btn btn-primary ada-btn" onclick="clickUploadImage()">Upload...</button>
+                <button type="button" class="btn btn-danger ada-btn">Clear</button>
+            </div>
+       </form> 
+    </div>
+{% endblock control_panel %}
+
+{% block workspace %}
+    <div class="container-fluid ada-border">
+        <h1>workspace</h1>
+    </div>
+{% endblock workspace %}

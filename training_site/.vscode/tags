@@ -1,0 +1,46 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+ALLOWED_HOSTS	../training_site/settings.py	/^ALLOWED_HOSTS = []$/;"	kind:variable	line:28
+AUTH_PASSWORD_VALIDATORS	../training_site/settings.py	/^AUTH_PASSWORD_VALIDATORS = [$/;"	kind:variable	line:88
+BASE_DIR	../training_site/settings.py	/^BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))$/;"	kind:variable	line:16
+DATABASES	../training_site/settings.py	/^DATABASES = {$/;"	kind:variable	line:77
+DEBUG	../training_site/settings.py	/^DEBUG = True$/;"	kind:variable	line:26
+INSTALLED_APPS	../training_site/settings.py	/^INSTALLED_APPS = [$/;"	kind:variable	line:33
+LANGUAGE_CODE	../training_site/settings.py	/^LANGUAGE_CODE = 'en-us'$/;"	kind:variable	line:107
+MIDDLEWARE	../training_site/settings.py	/^MIDDLEWARE = [$/;"	kind:variable	line:43
+MechanismConfig	../mechanism/apps.py	/^class MechanismConfig(AppConfig):$/;"	kind:class	line:4
+ROOT_URLCONF	../training_site/settings.py	/^ROOT_URLCONF = 'training_site.urls'$/;"	kind:variable	line:53
+SECRET_KEY	../training_site/settings.py	/^SECRET_KEY = '%58^q*-x1oh*)oea!!166_u1of25qn$d_ozsheyyuybhezs4$z'$/;"	kind:variable	line:23
+STATIC_URL	../training_site/settings.py	/^STATIC_URL = '\/static\/'$/;"	kind:variable	line:121
+TEMPLATES	../training_site/settings.py	/^TEMPLATES = [$/;"	kind:variable	line:55
+TIME_ZONE	../training_site/settings.py	/^TIME_ZONE = 'UTC'$/;"	kind:variable	line:109
+USE_I18N	../training_site/settings.py	/^USE_I18N = True$/;"	kind:variable	line:111
+USE_L10N	../training_site/settings.py	/^USE_L10N = True$/;"	kind:variable	line:113
+USE_TZ	../training_site/settings.py	/^USE_TZ = True$/;"	kind:variable	line:115
+UploadFileForm	../mechanism/models/forms.py	/^class UploadFileForm(forms.Form):$/;"	kind:class	line:5
+WSGI_APPLICATION	../training_site/settings.py	/^WSGI_APPLICATION = 'training_site.wsgi.application'$/;"	kind:variable	line:71
+__init__.py	../mechanism/__init__.py	1;"	kind:file	line:1
+__init__.py	../mechanism/migrations/__init__.py	1;"	kind:file	line:1
+__init__.py	../training_site/__init__.py	1;"	kind:file	line:1
+admin.py	../mechanism/admin.py	1;"	kind:file	line:1
+application	../training_site/wsgi.py	/^application = get_wsgi_application()$/;"	kind:variable	line:16
+apps.py	../mechanism/apps.py	1;"	kind:file	line:1
+file	../mechanism/models/forms.py	/^    file = forms.FileField()$/;"	kind:variable	line:7
+filename	../mechanism/models/forms.py	/^    filename = forms.CharField(max_length=512)$/;"	kind:variable	line:6
+forms.py	../mechanism/models/forms.py	1;"	kind:file	line:1
+index	../mechanism/views.py	/^def index(req):$/;"	kind:function	line:5
+manage.py	../manage.py	1;"	kind:file	line:1
+name	../mechanism/apps.py	/^    name = 'mechanism'$/;"	kind:variable	line:5
+settings.py	../training_site/settings.py	1;"	kind:file	line:1
+tests.py	../mechanism/tests.py	1;"	kind:file	line:1
+upload	../mechanism/views.py	/^def upload(req):$/;"	kind:function	line:9
+urlpatterns	../mechanism/urls.py	/^urlpatterns = [$/;"	kind:variable	line:4
+urlpatterns	../training_site/urls.py	/^urlpatterns = [$/;"	kind:variable	line:19
+urls.py	../mechanism/urls.py	1;"	kind:file	line:1
+urls.py	../training_site/urls.py	1;"	kind:file	line:1
+views.py	../mechanism/views.py	1;"	kind:file	line:1
+wsgi.py	../training_site/wsgi.py	1;"	kind:file	line:1

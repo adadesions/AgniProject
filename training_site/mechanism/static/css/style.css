@@ -1,0 +1,20 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.ada-border {
+    border: 1px solid rgb(208, 208, 208);
+}
+
+.ada-margin-top {
+    margin-top: 1em;
+}
+
+.ada-btn {
+    margin-bottom: 1em;
+}
+
+.control-readonly {
+    margin-left: 0.5em
+}
