@@ -24,3 +24,11 @@ def index(req):
             print('Form is not valid')
 
     return render(req, 'mechanism/index.html', {'filename': '-'})
+
+
+def imageview(req, filename):
+    img_obj = UploadImage.objects.filter(filename=filename)[0]
+    context = {
+        'img_path': img_obj.file.url
+    }
+    return render(req, 'mechanism/components/imageview.html', context)

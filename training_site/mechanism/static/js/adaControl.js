@@ -11,11 +11,15 @@ function clickClearBtn() {
 }
 
 function changingUploadInput() {
+    let filepath = $('#id_file').val().split("\\")
+    let filename = filepath[2]
+    upload_filname.val(filename)
     $('#upload_form').ajaxSubmit(function(data){
-        upload_filname.val(data.filename)
+        $('#workspace').load('/training/imageview/'+filename)
     })
 }
 
+// Events Handler
 upload_input.change(changingUploadInput)
 
   
