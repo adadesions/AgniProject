@@ -99,3 +99,8 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# Ada modify
+uploads/
+__pycache__/
+*.pyc

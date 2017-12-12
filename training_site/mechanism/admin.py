@@ -1,3 +1,8 @@
 from django.contrib import admin
+from mechanism.models import UploadImage
 
-# Register your models here.
+
+class UploadImageAdmin(admin.ModelAdmin):
+    pass
+
+admin.site.register(UploadImage, UploadImageAdmin)

@@ -7,7 +7,7 @@ function clickUploadImage() {
 function changingUploadInput() {
     $('#upload_form').ajaxSubmit(function(data){
         console.log(data)
-        $('#file_name').val(data.filename)
+        $('#id_filename').val(data.filename)
     })
 }
 
