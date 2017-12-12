@@ -17,9 +17,10 @@ def index(req):
                 }
             img_obj = UploadImage(**img_data)
             img_obj.save()
+
             del img_data['file']
             return JsonResponse(img_data)
         else:
-            print('Form is not valid')            
+            print('Form is not valid')
 
     return render(req, 'mechanism/index.html', {'filename': '-'})

@@ -104,3 +104,4 @@ ENV/
 uploads/
 __pycache__/
 *.pyc
+db.*
