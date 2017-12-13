@@ -31,13 +31,14 @@ def index(req):
     return render(req, 'mechanism/index.html', context)
 
 
-def imageview(req, filename):
+def imageview(req, control_id, filename):
     context = {
         'img_path': 'static/default_imageview.jpg'
     }
     if req.is_ajax():
         img_obj = UploadImage.objects.filter(filename=filename)[0]
         context = {
-            'img_path': img_obj.file.url
+            'img_path': img_obj.file.url,
+            'control_id': control_id
         }
     return render(req, 'mechanism/components/imageview.html', context)

@@ -6,9 +6,10 @@ function clickUploadImage(control_id) {
 function clickClearBtn(control_id) {
     let upload_input = $('#upload_form_'+control_id).find('#id_file')
     let upload_filename = $('#upload_form_'+control_id).find('#id_filename')
-    console.log(upload_filename)
+    let imageview = $('#imageview_'+control_id)
     upload_input.val('')
     upload_filename.val('-')
+    imageview.attr('src', '/static/images/default_imageview.jpg')
 }
 
 function changingUploadInput() {
@@ -22,7 +23,7 @@ function changingUploadInput() {
 
     upload_filname.val(filename)
     form.ajaxSubmit(function(data){
-        workspace.load('/training/imageview/'+filename)
+        workspace.load('/training/imageview/'+control_id+'/'+filename)
     })
 }
 
