@@ -5,6 +5,7 @@
 
         <form id="upload_form_{{control_id}}" action={% url 'machanism:index' %} enctype="multipart/form-data" method="POST">
         {% csrf_token %}
+            <input type="text" name="control_id" value={{control_id}} readonly hidden>
             <div class="form-group">
                 <label for="file_name">
                     <b>{{control_id|title}} Filename</b>

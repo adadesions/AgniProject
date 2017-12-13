@@ -6,6 +6,9 @@ from . import views
 app_name = 'machanism'
 urlpatterns = [
     path('', views.index, name='index'),
-    path('imageview/<control_id>/<filename>', views.imageview, name='imageview'),
+    path(
+        'imageview/<control_id>/<filename>',
+        views.imageview, name='imageview'
+        ),
 ]
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
