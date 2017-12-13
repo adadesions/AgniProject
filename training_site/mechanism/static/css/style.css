@@ -3,7 +3,12 @@ body {
     padding: 0;
 }
 
+.ada-control-form {
+    margin-bottom: 1em
+}
+
 .ada-border {
+    height: auto;
     border: 1px solid rgb(208, 208, 208);
 }
 

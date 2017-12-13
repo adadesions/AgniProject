@@ -1,25 +1,35 @@
-var upload_input = $('#id_file')
-var upload_filname = $('#id_filename')
-
-function clickUploadImage() {
+function clickUploadImage(control_id) {
+    let upload_input = $('#upload_form_'+control_id).find('#id_file')
     upload_input.trigger('click')
 }
 
-function clickClearBtn() {
+function clickClearBtn(control_id) {
+    let upload_input = $('#upload_form_'+control_id).find('#id_file')
+    let upload_filename = $('#upload_form_'+control_id).find('#id_filename')
+    console.log(upload_filename)
     upload_input.val('')
-    upload_filname.val('-')
+    upload_filename.val('-')
 }
 
 function changingUploadInput() {
-    let filepath = $('#id_file').val().split("\\")
+    let control_id = $(this).attr('class')
+    let form = $('#upload_form_' + control_id)
+    let upload_input = form.find('#id_file')
+    let upload_filname = form.find('#id_filename')
+    let filepath = upload_input.val().split("\\")
     let filename = filepath[2]
+    let workspace = $('#workspace_' + control_id)
+
     upload_filname.val(filename)
-    $('#upload_form').ajaxSubmit(function(data){
-        $('#workspace').load('/training/imageview/'+filename)
+    form.ajaxSubmit(function(data){
+        workspace.load('/training/imageview/'+filename)
     })
 }
 
 // Events Handler
-upload_input.change(changingUploadInput)
+var left_upload = $('#upload_form_left').find('#id_file')
+var right_upload = $('#upload_form_right').find('#id_file')
+left_upload.change(changingUploadInput)
+right_upload.change(changingUploadInput)
 
   

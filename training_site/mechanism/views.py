@@ -23,12 +23,21 @@ def index(req):
         else:
             print('Form is not valid')
 
-    return render(req, 'mechanism/index.html', {'filename': '-'})
+    context = {
+        'filename': '-',
+        'img_path': '/static/images/default_imageview.jpg',
+        'control': ('left', 'right')
+        }
+    return render(req, 'mechanism/index.html', context)
 
 
 def imageview(req, filename):
-    img_obj = UploadImage.objects.filter(filename=filename)[0]
     context = {
-        'img_path': img_obj.file.url
+        'img_path': 'static/default_imageview.jpg'
     }
+    if req.is_ajax():
+        img_obj = UploadImage.objects.filter(filename=filename)[0]
+        context = {
+            'img_path': img_obj.file.url
+        }
     return render(req, 'mechanism/components/imageview.html', context)

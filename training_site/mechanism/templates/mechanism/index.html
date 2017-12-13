@@ -1,32 +1,38 @@
 {% extends "mechanism/_base.html" %}
 
 
-{% block control_panel %}
-    <div class="container ada-border">
-        <center>
-            <h3>Control Panel</h3>
-        </center><hr>
-        <form id="upload_form" action={% url 'machanism:index' %} enctype="multipart/form-data" method="POST">
+{% block control_panel_form %}
+
+        <form id="upload_form_{{control_id}}" action={% url 'machanism:index' %} enctype="multipart/form-data" method="POST">
         {% csrf_token %}
-        <!-- {{form}} -->
             <div class="form-group">
                 <label for="file_name">
-                    <b>Filename</b>
+                    <b>{{control_id|title}} Filename</b>
                 </label>
                 <input type="text" readonly class="form-control-plaintext control-readonly" id="id_filename" name="filename" value={{filename}}>
             </div>
             <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <input type="file" id="id_file" name="file" hidden>
+                <input type="file" id="id_file" class={{control_id}} name="file" hidden>
                 <button type="submit" id="upload-submit-btn"></button>
-                <button type="button" class="btn btn-primary ada-btn" onclick="clickUploadImage()">Upload...</button>
-                <button type="button" class="btn btn-danger ada-btn" onclick="clickClearBtn()">Clear</button>
+                <button type="button" class="btn btn-primary ada-btn" onclick="clickUploadImage('{{control_id}}')">Upload...</button>
+                <button type="button" class="btn btn-danger ada-btn" onclick="clickClearBtn('{{control_id}}')">Clear</button>
             </div>
        </form> 
-    </div>
-{% endblock control_panel %}
+{% endblock control_panel_form %}
 
 {% block workspace %}
     <div class="container-fluid ada-border">
-        <div id="workspace"></div>
+        <div class="row">
+            <div class="col-6">
+                <div id="workspace_left">
+                    {% include "./components/imageview.html" %}
+                </div>
+            </div>
+            <div class="col-6">
+                <div id="workspace_right">
+                    {% include "./components/imageview.html" %}
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock workspace %}
