@@ -49,4 +49,3 @@ def imageview(req, control_id, filename):
             'control_id': control_id
         }
     return render(req, 'mechanism/components/imageview.html', context)
-    
