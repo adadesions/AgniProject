@@ -3,12 +3,17 @@ from django.http import HttpResponse, JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import UploadImage
 from .forms import UploadFileForm
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
 
 
 @csrf_exempt
 def index(req):
     if req.method == 'POST':
         form = UploadFileForm(req.POST, req.FILES)
+        predictor_path = 'mechanism/static/shape_predictor_68_face_landmarks.dat'
         if form.is_valid():
             req_file = req.FILES['file']
             align = req.POST.get('control_id')[0].upper()
@@ -23,6 +28,7 @@ def index(req):
             count = UploadImage.objects.filter(align=align).count()
             img_obj = UploadImage(**img_data)
             img_obj.filename = img_obj.rename(count)
+            img_obj.yaml_file = img_obj.extract_feature(predictor_path)
             img_obj.save()
 
             del img_data['file']

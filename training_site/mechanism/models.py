@@ -1,5 +1,15 @@
+import dlib
 from django.db import models
 from django.forms import ModelForm
+from yamlfield.fields import YAMLField
+from skimage import io, img_as_ubyte
+from skimage.transform import resize
+from skimage.draw import circle
+from yaml import load, dump
+try:
+    from yaml import CLoader as Loader, CDumper as Dumper
+except ImportError:
+    from yaml import Loader, Dumper
 
 
 class UploadImage(models.Model):
@@ -14,6 +24,7 @@ class UploadImage(models.Model):
     extension = models.CharField(max_length=10)
     align = models.CharField(max_length=1, choices=alignment, default='L')
     upload_date = models.DateTimeField(auto_now=True)
+    yaml_file = YAMLField()
 
     def __str__(self):
         return "{0}\t{1}".format(self.filename, self.upload_date)
@@ -21,6 +32,36 @@ class UploadImage(models.Model):
     def rename(self, count):
         new_name = '_'.join(['Face', str(self.align), str(count)])
         return new_name
+
+    def extract_feature(self, predictor_path):
+        face_path = self.file
+        detector = dlib.get_frontal_face_detector()
+        predictor = dlib.shape_predictor(predictor_path)
+        img = io.imread(face_path)
+        img = img_as_ubyte(img)
+        dets = detector(img, 1)
+        for d in dets:
+            shape = predictor(img, d)        
+        try:
+            shape
+        except NameError:
+            print("Not found any face")
+            return []
+        else:
+            result = []
+            for i in range(shape.num_parts):
+                point = shape.part(i)
+                result.append({
+                    'x': point.x,
+                    'y': point.y,
+                    'z': 0
+                })
+            yaml_file = dump({
+                'filename': self.filename,
+                'features': result
+            })
+            print(yaml_file)
+            return yaml_file
 
 
 class UploadFileForm(ModelForm):
