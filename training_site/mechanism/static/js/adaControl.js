@@ -12,6 +12,44 @@ function clickClearBtn(control_id) {
     imageview.attr('src', '/static/images/default_imageview.jpg')
 }
 
+function drawFace(img_path, control_id) {
+    let canvas = $('#canvas_'+control_id)
+    let width = canvas.attr('width')
+    let height = canvas.attr('height') 
+    canvas.drawImage({
+        layer: true,
+        source: img_path,
+        x: width/2,
+        y: height/2,
+        width,
+        height
+    })
+}
+
+function drawShape(shape_parts, control_id) {
+    let canvas = $('#canvas_'+control_id)
+    let width = canvas.attr('width')
+    let height = canvas.attr('height') 
+    canvas.addLayer({
+        type: 'rectangle',
+        x: width/2, y: height/2,
+        width, height
+    }).drawLayers()
+    radius = 5
+    for(p in shape_parts) {
+        x = shape_parts[p].x,
+        y = shape_parts[p].y
+        canvas.drawEllipse({
+            layer: true,
+            fillStyle: '#00FF00',
+            width: radius,
+            height: radius,
+            x,
+            y
+        })
+    }    
+}
+
 function changingUploadInput() {
     let control_id = $(this).attr('class')
     let form = $('#upload_form_' + control_id)
@@ -23,8 +61,9 @@ function changingUploadInput() {
 
     upload_filname.val(filename)
     form.ajaxSubmit(function(data){
-        workspace.load('/training/imageview/'+control_id+'/'+filename)
-        console.log(data)
+        let clearCanvas = $('#canvas_'+control_id).clearCanvas()
+        drawFace(data.path, control_id)
+        drawShape(data.shape_parts, control_id)
     })
 }
 

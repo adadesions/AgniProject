@@ -20,6 +20,10 @@ body {
     margin-bottom: 1em;
 }
 
+.ada-canvas {
+    border: 1px solid #000000;
+}
+
 .control-readonly {
     margin-left: 0.5em
 }

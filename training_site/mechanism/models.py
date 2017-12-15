@@ -47,7 +47,7 @@ class UploadImage(models.Model):
         face_path = self.file
         detector = dlib.get_frontal_face_detector()
         predictor = dlib.shape_predictor(predictor_path)
-        img = io.imread(face_path)
+        img = resize(io.imread(face_path), (700, 700), mode='reflect')
         img = img_as_ubyte(img)
         dets = detector(img, 1)
         for d in dets:

@@ -26,6 +26,7 @@ def index(req):
                 'extension': extension
                 }
             count = UploadImage.objects.filter(align=align).count()
+            # Create Image Object for Save to DB
             img_obj = UploadImage(**img_data)
             img_obj.filename = img_obj.rename(count)
             req_file.name = img_obj.filename
@@ -38,6 +39,7 @@ def index(req):
             del img_data['file']
             img_data['shape_parts'] = shape_parts
             img_data['filename'] = img_obj.filename
+            img_data['path'] = img_obj.file.url
             return JsonResponse(img_data)
         else:
             print('Form is not valid')
