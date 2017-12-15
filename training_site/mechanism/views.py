@@ -28,10 +28,16 @@ def index(req):
             count = UploadImage.objects.filter(align=align).count()
             img_obj = UploadImage(**img_data)
             img_obj.filename = img_obj.rename(count)
-            img_obj.yaml_file = img_obj.extract_feature(predictor_path)
+            req_file.name = img_obj.filename
+            img_obj.yaml_file, shape_parts = img_obj.extract_feature(predictor_path)
+            w, h = img_obj.get_shape()
+            img_obj.width = w
+            img_obj.height = h
             img_obj.save()
 
             del img_data['file']
+            img_data['shape_parts'] = shape_parts
+            img_data['filename'] = img_obj.filename
             return JsonResponse(img_data)
         else:
             print('Form is not valid')

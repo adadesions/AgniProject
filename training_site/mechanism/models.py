@@ -23,6 +23,8 @@ class UploadImage(models.Model):
     file = models.ImageField(upload_to='uploads/')
     extension = models.CharField(max_length=10)
     align = models.CharField(max_length=1, choices=alignment, default='L')
+    width = models.SmallIntegerField(default=0)
+    height = models.SmallIntegerField(default=0)
     upload_date = models.DateTimeField(auto_now=True)
     yaml_file = YAMLField()
 
@@ -31,7 +33,15 @@ class UploadImage(models.Model):
 
     def rename(self, count):
         new_name = '_'.join(['Face', str(self.align), str(count)])
+        new_name += '.'+str(self.extension)
         return new_name
+
+    def get_shape(self):
+        face_path = self.file
+        img = io.imread(face_path)
+        width = img.shape[0]
+        height = img.shape[1]
+        return width, height
 
     def extract_feature(self, predictor_path):
         face_path = self.file
@@ -60,8 +70,7 @@ class UploadImage(models.Model):
                 'filename': self.filename,
                 'features': result
             })
-            print(yaml_file)
-            return yaml_file
+            return yaml_file, result
 
 
 class UploadFileForm(ModelForm):

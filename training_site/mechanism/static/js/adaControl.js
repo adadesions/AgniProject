@@ -24,6 +24,7 @@ function changingUploadInput() {
     upload_filname.val(filename)
     form.ajaxSubmit(function(data){
         workspace.load('/training/imageview/'+control_id+'/'+filename)
+        console.log(data)
     })
 }
 
