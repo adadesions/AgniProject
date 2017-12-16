@@ -15,7 +15,7 @@ function clickClearBtn(control_id) {
 function drawFace(img_path, control_id) {
     let canvas = $('#canvas_'+control_id)
     let width = canvas.attr('width')
-    let height = canvas.attr('height') 
+    let height = canvas.attr('height')
     canvas.drawImage({
         layer: true,
         source: img_path,
@@ -31,6 +31,7 @@ function drawShape(shape_parts, control_id) {
     let width = canvas.attr('width')
     let height = canvas.attr('height') 
     canvas.addLayer({
+        name: 'layer_shape_'+control_id,
         type: 'rectangle',
         x: width/2, y: height/2,
         width, height
@@ -48,7 +49,8 @@ function drawShape(shape_parts, control_id) {
             x,
             y
         })
-    }    
+    }
+    canvas.moveLayer('layer_shape_'+control_id, 1)
 }
 
 function changingUploadInput() {
