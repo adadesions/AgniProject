@@ -35,12 +35,13 @@ function drawShape(shape_parts, control_id) {
         x: width/2, y: height/2,
         width, height
     }).drawLayers()
-    radius = 5
+    radius = 10
     for(p in shape_parts) {
         x = shape_parts[p].x,
         y = shape_parts[p].y
         canvas.drawEllipse({
             layer: true,
+            draggable: true,
             fillStyle: '#00FF00',
             width: radius,
             height: radius,
