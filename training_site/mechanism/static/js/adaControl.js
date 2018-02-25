@@ -70,6 +70,10 @@ function changingUploadInput() {
     })
 }
 
+function clickSaveBtn() {
+    
+}
+
 // Events Handler
 var left_upload = $('#upload_form_left').find('#id_file')
 var right_upload = $('#upload_form_right').find('#id_file')
