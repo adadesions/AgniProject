@@ -13,7 +13,9 @@ except ImportError:
 def index(req):
     if req.method == 'POST':
         form = UploadFileForm(req.POST, req.FILES)
-        predictor_path = 'mechanism/static/shape_predictor_68_face_landmarks.dat'
+        predictor_path = 'mechanism/static/'
+        'shape_predictor_68_face_landmarks.dat'
+
         if form.is_valid():
             req_file = req.FILES['file']
             align = req.POST.get('control_id')[0].upper()
@@ -30,7 +32,9 @@ def index(req):
             img_obj = UploadImage(**img_data)
             img_obj.filename = img_obj.rename(count)
             req_file.name = img_obj.filename
-            img_obj.yaml_file, shape_parts = img_obj.extract_feature(predictor_path)
+            img_obj.yaml_file, shape_parts = (
+                img_obj.extract_feature(predictor_path)
+            )
             w, h = img_obj.get_shape()
             img_obj.width = w
             img_obj.height = h
