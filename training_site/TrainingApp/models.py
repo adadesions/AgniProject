@@ -72,9 +72,3 @@ class UploadImage(models.Model):
                 'features': result
             })
             return yaml_file, result
-
-
-class UploadFileForm(ModelForm):
-    class Meta:
-        model = UploadImage
-        fields = ['file', 'filename']
