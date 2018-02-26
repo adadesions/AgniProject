@@ -1,39 +1,172 @@
 {% extends "FacialValidationApp/base_site.html" %}
 
-
-{% block control_panel_form %}
-
-        <form id="upload_form_{{control_id}}" action={% url 'TrainingApp:index' %} enctype="multipart/form-data" method="POST">
-        {% csrf_token %}
-            <input type="text" name="control_id" value={{control_id}} readonly hidden>
-            <div class="form-group">
-                <label for="file_name">
-                    <b>{{control_id|title}} Filename</b>
-                </label>
-                <input type="text" readonly class="form-control-plaintext control-readonly" id="id_filename" name="filename" value={{filename}}>
-            </div>
-            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <input type="file" id="id_file" class={{control_id}} name="file" hidden>
-                <button type="submit" id="upload-submit-btn" hidden></button>
-                <button type="button" class="btn btn-primary ada-btn" onclick="clickUploadImage('{{control_id}}')">Upload...</button>
-                <button type="button" class="btn btn-danger ada-btn" onclick="clickClearBtn('{{control_id}}')">Clear</button>
-            </div>
-       </form> 
-{% endblock control_panel_form %}
-
 {% block workspace %}
-    <div class="container-fluid ada-border">
-        <div class="row">
-            <div class="col-6">
-                <div id="workspace_left">
-                    {% include "./components/imageview.html" with control_id='left' %}
-                </div>
-            </div>
-            <div class="col-6">
-                <div id="workspace_right">
-                    {% include "./components/imageview.html" with control_id='right' %}
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="face3D"></div>        
 {% endblock workspace %}
+
+{% block controls %}
+    <button>a</button>
+{% endblock controls %}
+
+{% block scripts %}
+    <script src="https://threejs.org/build/three.js"></script>
+    <script src="/static/js/ShaderSkin.js"></script>
+
+    <script src="/static/js/shaders/CopyShader.js"></script>
+
+    <script src="/static/js/postprocessing/EffectComposer.js"></script>
+    <script src="/static/js/postprocessing/RenderPass.js"></script>
+    <script src="/static/js/postprocessing/ShaderPass.js"></script>
+    <script src="/static/js/postprocessing/MaskPass.js"></script>
+
+    <script src="/static/js/Detector.js"></script>
+    <script src="/static/js/libs/stats.min.js"></script>
+    <script src="/static//js/controls/OrbitControls.js"></script>
+	<script src="/static//js/libs/dat.gui.min.js"></script>
+	<script src="/static//js/renderers/Projector.js"></script>
+	<script src="/static//js/renderers/CanvasRenderer.js"></script>
+
+    <script>
+
+        if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+
+        var statsEnabled = true;
+        var container, stats, loader;
+        var camera, scene, renderer;
+        var mesh, mesh2;
+        var directionalLight;
+        var mapColor, mapHeight, mapSpecular;
+        var firstPass = true;
+        var composer, composerBeckmann;
+
+        init();
+        animate();
+
+        function init() {
+
+            container = document.getElementById('face3D')
+            camera = new THREE.PerspectiveCamera( 40, window.innerWidth / window.innerHeight, 1, 2000 );
+            camera.position.set( 0, 0, 1500 );
+
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color( 0x000000 );
+
+            renderer = new THREE.WebGLRenderer( { antialias: true } );
+            renderer.setPixelRatio( window.devicePixelRatio );
+            renderer.setSize( window.innerWidth-450, window.innerHeight-100 );
+            container.appendChild( renderer.domElement );
+            renderer.shadowMap.enabled = true;
+            renderer.autoClear = false;
+            renderer.gammaInput = true;
+            renderer.gammaOutput = true;
+            renderer.autoClear = false;
+
+            stats = new Stats();
+			//container.appendChild(stats.dom);
+            
+            // LIGHTS
+
+            scene.add( new THREE.AmbientLight( 0x333344 ) );
+
+            directionalLight = new THREE.DirectionalLight( 0xffffff, 1 );
+            directionalLight.position.set( 500, 0, 500 );
+            directionalLight.castShadow = true;
+            directionalLight.shadow.mapSize.width = 2048;
+            directionalLight.shadow.mapSize.height = 2048;
+            directionalLight.shadow.camera.near = 200;
+            directionalLight.shadow.camera.far = 1500;
+            directionalLight.shadow.camera.left = -500;
+            directionalLight.shadow.camera.right = 500;
+            directionalLight.shadow.camera.top = 500;
+            directionalLight.shadow.camera.bottom = -500;
+            directionalLight.shadow.bias = -0.005;
+            scene.add( directionalLight );
+
+            //
+            loader = new THREE.JSONLoader();
+            loader.load( "/static/models/json/leeperrysmith/LeePerrySmith.json", function ( geometry ) {
+                createScene( geometry, 100 )
+            } );
+            
+            // BECKMANN
+            var effectBeckmann = new THREE.ShaderPass( THREE.ShaderSkin[ "beckmann" ] );
+            var effectCopy = new THREE.ShaderPass( THREE.CopyShader );
+            effectCopy.renderToScreen = true;
+            var pars = { minFilter: THREE.LinearFilter, magFilter: THREE.LinearFilter, format: THREE.RGBFormat, stencilBuffer: false };
+            var rtwidth = 512, rtheight = 512;
+            composerBeckmann = new THREE.EffectComposer( renderer, new THREE.WebGLRenderTarget( rtwidth, rtheight, pars ) );
+            composerBeckmann.addPass( effectBeckmann );
+            composerBeckmann.addPass( effectCopy );
+
+            // EVENTS
+            var control = new THREE.OrbitControls( camera, renderer.domElement );
+            //document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+            window.addEventListener( 'resize', onWindowResize, false );
+
+        }
+
+        function createScene( geometry, scale ) {
+            console.log(geometry);
+
+            var textureLoader = new THREE.TextureLoader();
+            var mapHeight = textureLoader.load( "/static/models/json/leeperrysmith/Infinite-Level_02_Disp_NoSmoothUV-4096.jpg" );
+            mapHeight.anisotropy = 4;
+            mapHeight.wrapS = mapHeight.wrapT = THREE.RepeatWrapping;
+            mapHeight.format = THREE.RGBFormat;
+
+            var mapSpecular = textureLoader.load( "/static/models/json/leeperrysmith/Map-SPEC.jpg" );
+            mapSpecular.anisotropy = 4;
+            mapSpecular.wrapS = mapSpecular.wrapT = THREE.RepeatWrapping;
+            mapSpecular.format = THREE.RGBFormat;
+
+            var mapColor = textureLoader.load( "/static/models/json/leeperrysmith/Map-COL.jpg" );
+            mapColor.anisotropy = 4;
+            mapColor.wrapS = mapColor.wrapT = THREE.RepeatWrapping;
+            mapColor.format = THREE.RGBFormat;
+
+            var shader = THREE.ShaderSkin[ "skinSimple" ];
+            var fragmentShader = shader.fragmentShader;
+            var vertexShader = shader.vertexShader;
+            var uniforms = THREE.UniformsUtils.clone( shader.uniforms );
+
+            uniforms[ "enableBump" ].value = true;
+            uniforms[ "enableSpecular" ].value = true;
+            uniforms[ "tBeckmann" ].value = composerBeckmann.renderTarget1.texture;
+            uniforms[ "tDiffuse" ].value = mapColor;
+            uniforms[ "bumpMap" ].value = mapHeight;
+            uniforms[ "specularMap" ].value = mapSpecular;
+            uniforms[ "diffuse" ].value.setHex( 0xa0a0a0 );
+            uniforms[ "specular" ].value.setHex( 0xa0a0a0 );
+            uniforms[ "uRoughness" ].value = 0.2;
+            uniforms[ "uSpecularBrightness" ].value = 0.5;
+            uniforms[ "bumpScale" ].value = 8;
+
+            var material = new THREE.ShaderMaterial( { fragmentShader: fragmentShader, vertexShader: vertexShader, uniforms: uniforms, lights: true } );
+            material.extensions.derivatives = true;
+            mesh = new THREE.Mesh( geometry, material );
+            mesh.position.y = -50;
+            mesh.scale.set( scale, scale, scale );
+            mesh.castShadow = true;
+            mesh.receiveShadow = true;
+            scene.add( mesh );
+
+        }
+
+        function onWindowResize( ) {
+            camera.aspect = window.innerWidth / window.innerHeight;
+			camera.updateProjectionMatrix();
+			renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+			render();
+			stats.update();
+        }
+
+        function render() {
+            renderer.render( scene, camera );
+        }
+
+    </script>
+{% endblock scripts %}
