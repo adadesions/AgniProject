@@ -106,3 +106,5 @@ __pycache__/
 *.pyc
 db.*
 media/
+
+/node_modules
