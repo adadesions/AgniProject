@@ -6,4 +6,5 @@ from . import views
 app_name = 'FacialValidationApp'
 urlpatterns = [
     path('', views.index, name='index'),
+    path('facetexture', views.facetexture, name='facetexture'),    
 ]

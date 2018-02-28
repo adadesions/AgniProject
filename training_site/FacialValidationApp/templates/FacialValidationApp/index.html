@@ -1,39 +1,17 @@
 {% extends "FacialValidationApp/base_site.html" %}
 
-
-{% block control_panel_form %}
-
-        <form id="upload_form_{{control_id}}" action={% url 'TrainingApp:index' %} enctype="multipart/form-data" method="POST">
-        {% csrf_token %}
-            <input type="text" name="control_id" value={{control_id}} readonly hidden>
-            <div class="form-group">
-                <label for="file_name">
-                    <b>{{control_id|title}} Filename</b>
-                </label>
-                <input type="text" readonly class="form-control-plaintext control-readonly" id="id_filename" name="filename" value={{filename}}>
-            </div>
-            <div class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <input type="file" id="id_file" class={{control_id}} name="file" hidden>
-                <button type="submit" id="upload-submit-btn" hidden></button>
-                <button type="button" class="btn btn-primary ada-btn" onclick="clickUploadImage('{{control_id}}')">Upload...</button>
-                <button type="button" class="btn btn-danger ada-btn" onclick="clickClearBtn('{{control_id}}')">Clear</button>
-            </div>
-       </form> 
-{% endblock control_panel_form %}
-
 {% block workspace %}
-    <div class="container-fluid ada-border">
-        <div class="row">
-            <div class="col-6">
-                <div id="workspace_left">
-                    {% include "./components/imageview.html" with control_id='left' %}
-                </div>
-            </div>
-            <div class="col-6">
-                <div id="workspace_right">
-                    {% include "./components/imageview.html" with control_id='right' %}
-                </div>
-            </div>
-        </div>
-    </div>
+    <canvas id="compare" width="600" height="550"></canvas>
 {% endblock workspace %}
+
+{% block controls %}
+    <input type="file" value="load a model" id="loadjs"/>
+{% endblock controls %}
+
+{% block scripts %}
+    <script src="/static/build/clmtrackr.js"></script>
+    <script src="/static/js/models/model_pca_20_svm.js"></script>
+    <script src="/static/js/libs/dat.gui.min.js"></script>
+    <script src="/static/js/face-pca.js"></script>
+    <script src="/static/js/face3d.js"></script>
+{% endblock scripts %}

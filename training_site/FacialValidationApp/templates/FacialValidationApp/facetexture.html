@@ -1,0 +1,36 @@
+{% extends "FacialValidationApp/base_site.html" %}
+
+{% block workspace %}
+    <h2>Face tracking in images</h2>
+    <div id="container">
+        <canvas id="image" width="625" height="500"></canvas>
+        <canvas id="overlay" width="625" height="500"></canvas>
+    </div>
+    <br/>
+    <input type="button" class="btn" value="start" onclick="animateClean()"></input>
+    <input type="button" class="btn" value="manually select face" onclick="selectBox()"></input>
+    <input type="file" class="btn" id="files" name="files[]" />
+{% endblock workspace %}
+
+{% block controls %}
+{% endblock controls %}
+
+{% block scripts %}
+    <script src="/static/js/libs/utils.js"></script>
+    <script src="/static/js/libs/dat.gui.min.js"></script>
+    <script src="/static/build/clmtrackr.js"></script>
+    <script src="/static/js/libs/Stats.js"></script>
+    <script src="/static/js/libs/jquery.min.js"></script>
+    <script src="/static/js/libs/jquery.imgareaselect.pack.js"></script>
+    <script src="/static/js/face3d.js"></script>
+    <script>
+        var _gaq = _gaq || [];
+			_gaq.push(['_setAccount', 'UA-32642923-1']);
+			_gaq.push(['_trackPageview']);
+			(function() {
+				var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+				ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+				var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+			})();
+    </script>
+{% endblock scripts %}
