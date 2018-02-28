@@ -108,3 +108,4 @@ db.*
 media/
 
 /node_modules
+/training_site/FacialValidationApp/static/node_modules

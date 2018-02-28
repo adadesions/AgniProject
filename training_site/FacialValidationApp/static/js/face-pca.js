@@ -2,143 +2,128 @@ $(document).ready(() => {
     function loadjs(file) {
         var reader = new FileReader();
         var str;
-        reader.onload = function(theFile) {
+        reader.onload = function (theFile) {
             str = theFile.target.result;
             debugger;
-            (function() { eval.apply(this, arguments); }(str));
+            (function () { eval.apply(this, arguments); }(str));
             rebuild();
         }
-        reader.onerror = function() {alert("error reading file")};
+        reader.onerror = function () { alert("error reading file") };
         reader.readAsText(file.target.files[0]);
     }
     document.getElementById('loadjs').addEventListener('change', loadjs, false);
-    
-    // function rebuild() {
-    //     // check how many parameters
-    //     pnums = pModel.shapeModel.eigenValues.length;
-    //     ph = new parameterHolder();
-    //     gui.destroy();
-    //     gui = new dat.GUI();
-    //     control = {};
-    //     eig = 0;
-    //     for (var i = 0;i < pnums;i++) {
-    //         eig = Math.sqrt(pModel.shapeModel.eigenValues[i])*3
-    //         control['c'+(i+1)] = gui.add(ph, 'component '+(i+1), -eig, eig);
-    //     }
-    //     for (var i = 0;i < pnums;i++) {
-    //         control['c'+(i+1)].onChange(drawNew);
-    //     }
-    //     params = [];
-    //     for (var i = 0;i < pnums;i++) {
-    //         params.push(ph['component '+(i+1)]);
-    //     }
-    //     drawNew();
-    // }
 
     var canvasInput = document.getElementById('compare');
     var cc = canvasInput.getContext('2d');
-    cc.fillStyle = "rgb(200, 0, 0)";
+    // cc.fillStyle = "rgb(0, 0, 255)";
+
     // check how many parameters
     var pnums = pModel.shapeModel.eigenValues.length;
-    var parameterHolder = function() {
+    var parameterHolder = function () {
         for (var i = 0; i < pnums; i++) {
-            this['face '+(i+1)] = 0;
+            this['face ' + (i + 1)] = 0;
         }
     };
     var ph = new parameterHolder();
     var gui = new dat.GUI();
     var control = {};
     var eig = 0;
-    for (var i = 0;i < pnums;i++) {
-        eig = Math.sqrt(pModel.shapeModel.eigenValues[i])*3
-        control['c'+(i+1)] = gui.add(ph, 'face '+(i+1), -eig, eig);
+    for (var i = 0; i < pnums; i++) {
+        eig = Math.sqrt(pModel.shapeModel.eigenValues[i]) * 3
+        control['c' + (i + 1)] = gui.add(ph, 'face ' + (i + 1), -eig, eig);
     }
     var params;
-    var drawNew = function(value) {
+    var drawNew = function (value) {
         cc.clearRect(0, 0, 600, 600);
         params = [];
-        for (var i = 0;i < pnums;i++) {
-            params.push(ph['face '+(i+1)]);
+        for (var i = 0; i < pnums; i++) {
+            params.push(ph['face ' + (i + 1)]);
         }
         draw(document.getElementById('compare'), similarityTransforms.concat(params));
     }
 
-    for (var i = 0;i < pnums;i++) {
-        control['c'+(i+1)].onChange(drawNew);
+    for (var i = 0; i < pnums; i++) {
+        control['c' + (i + 1)].onChange(drawNew);
     }
 
     params = [];
-    for (var i = 0;i < pnums;i++) {
-        params.push(ph['face '+(i+1)]);
+    for (var i = 0; i < pnums; i++) {
+        params.push(ph['face ' + (i + 1)]);
     }
 
-    var similarityTransforms = [4, 0, 0, 0];    
+    var similarityTransforms = [4, 0, 0, 0];
     //var similarityTransforms = [1, 0, -250, -450];
     //var similarityTransforms = [1, 0, 200, 200];
     var paramslength = params.length;
     var num_points = pModel.shapeModel.numPtsPerSample;
-    var x,y;
+    var x, y;
     var i, path;
+    var pixelColor = [
+        [0,53,51,48,45,45,52,56,64,63,63,64,67,71,77,81,77,72,56,40,40,56,73,83,89,91,89,87,88,92,93,92,95,95,95,95,95,95,95,95,92,92,93,94,95,96,97,98,102,101,100,100,100,100,101,102,101,101,101,101,101,101,101,101,102,103,104,104,103,102,103,104,104,104,104,105,105,105,106,106,110,110,112,112,113,113,115,115,115,117,121,120,120,119,121,123,120,118,115,111,113,113,108,102,91,84,72,62,60,66,73,75,79,66,58,59,54,0,54,65,78,79,81,84,83,81,79,77,77,80,84,84,83,76,72,70,64,64,54,33,18,15,17,15,0,8,9,9,14,16,14,16,17,15,12,11,21,39,56,60,62,64,62,56,55,52,46,47,49,53,59,63,64,66,68,67,64,66,70,73,76,79,81,83,86,86,85,86,87,88,88,88,92,92,92,94,96,96,94,93,93,93,93,95,97,97,96,94,96,95,95,94,93,92,91,91,85,84,83,81,80,78,76,76,74,74,72,70,67,65,66,65,63,61,60,58,56,57,58,56,60,62,64,66,67,65,63,61,65,68,72,74,76,77,78,80,77,77,77,77,75,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,51,48,44,42,42,49,54,66,67,64,63,63,68,77,81,80,76,62,47,44,59,74,83,90,91,89,87,87,91,91,89,92,93,93,94,95,95,96,96,91,91,92,93,94,95,96,97,102,101,100,99,99,100,101,102,101,101,101,101,101,101,101,101,100,102,105,106,104,103,102,102,104,104,104,104,105,105,105,106,110,110,112,112,113,113,115,115,116,118,121,120,121,120,122,123,119,117,114,112,114,114,106,99,88,80,68,65,69,73,76,75,74,63,55,56,0,51,60,72,79,82,85,86,83,80,80,80,80,84,87,86,84,79,73,70,63,64,56,36,21,17,17,13,7,29,33,19,18,25,27,24,21,19,15,15,24,41,57,59,63,65,62,56,55,52,47,47,49,53,59,64,64,66,68,70,66,67,70,73,76,79,81,84,86,86,84,85,86,87,88,88,90,90,91,93,95,96,95,94,95,94,95,96,98,98,96,94,96,95,94,94,93,92,92,92,87,86,85,83,81,78,77,76,74,73,72,70,69,67,66,66,65,64,62,61,59,57,56,55,58,58,61,63,66,64,61,59,60,61,63,68,74,76,76,75,75,75,76,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+        [0,38,42,43,44,42,43,46,48,50,56,60,63,66,71,73,73,79,77,70,68,75,82,86,88,90,89,87,87,89,88,86,89,89,90,92,93,95,96,97,93,93,94,95,96,98,98,99,101,100,99,99,99,99,100,101,101,101,101,101,101,101,101,101,99,102,105,107,105,103,102,101,103,103,103,104,104,104,105,105,109,109,111,111,112,112,114,114,118,118,119,120,122,122,123,122,117,115,113,111,111,110,101,93,89,74,58,60,70,74,74,71,63,55,0,51,53,58,71,82,86,89,92,91,85,81,83,85,80,84,87,86,83,78,72,69,65,66,57,37,22,18,19,15,23,26,23,23,34,38,35,33,28,24,21,22,32,48,60,58,64,67,64,58,57,54,49,49,51,55,61,65,66,68,70,72,68,68,70,72,75,79,82,86,87,86,83,83,84,86,88,89,90,90,91,93,96,97,96,95,97,97,96,98,99,99,97,95,95,94,92,91,91,91,92,93,90,89,88,86,84,82,80,79,77,76,75,74,72,71,71,70,66,66,68,67,66,62,59,54,52,53,58,61,64,65,67,67,61,56,53,52,56,61,66,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0]
+    ];
+    for (var row = 0; row < pixelColor.length; row++){
+        var rpx = pixelColor[row];
+        for (var col = 0; col < rpx.length; col++) {
+            var xpx=0, ypx=1;
+            var meanX = pModel.shapeModel.meanShape[0][col];
+            var meanY = pModel.shapeModel.meanShape[1][row];
+            cc.fillStyle = "rgb(" + rpx[100] + ", "+ rpx[100] +", "+ rpx[100] +")";
+            cc.fillRect(meanX, meanY, 2, 2);
+            //console.log("pixelColor[" + row + "][" + col + "] = " + rpx[col]);
+        }
+    }
+    
 
-    var drawPath = function(canvasContext, path, dp) {
+    var drawPath = function (canvasContext, path, dp) {
         canvasContext.beginPath();
-        var i, x, y, plg;
-        for (var p = 0; p < path.length; p++) {
-            i = path[p]*2;
-            plg = pModel.path.vertices[p];
-            x = pModel.shapeModel.meanShape[i/2][0]; //x begin
-            y = pModel.shapeModel.meanShape[i/2][1];
+        var i, x, y;
 
-            for (let v = 0; v < 5; v++) {
-                var v0, v1, v2, v3;
-                v0 = pModel.path.vertices[v][0];
-                v1 = pModel.path.vertices[v][1];                
-                v2 = pModel.path.vertices[v][2];                
-                v3 = pModel.path.vertices[v][3];
-            }
+        for (var p = 0; p < path.length; p++) {
+            i = path[p] * 2;
+            x = pModel.shapeModel.meanShape[i / 2][0]; //x begin
+            y = pModel.shapeModel.meanShape[i / 2][1];
 
             for (var j = 0; j < pModel.shapeModel.numEvalues; j++) {
-                x += pModel.shapeModel.eigenVectors[i][j]*dp[j+4];
-                y += pModel.shapeModel.eigenVectors[i+1][j]*dp[j+4];
+                x += pModel.shapeModel.eigenVectors[i][j] * dp[j + 4];
+                y += pModel.shapeModel.eigenVectors[i + 1][j] * dp[j + 4];
             }
 
-            a = dp[0]*x - dp[1]*y + dp[2];
-            b = dp[0]*y + dp[1]*x + dp[3];
+            a = dp[0] * x - dp[1] * y + dp[2];
+            b = dp[0] * y + dp[1] * x + dp[3];
             x += a;
             y += b;
-            
-            if (i == 0) {
-                canvasContext.moveTo(x, y);
-            } else {
-                canvasContext.lineTo(x, y);                
-            }
+            canvasContext.lineTo(x, y);
+            // canvasContext.fill();
         }
+        
         canvasContext.moveTo(0, 0);
         canvasContext.closePath();
         canvasContext.stroke();
     }
-    
+
     function drawPoint(canvasContext, point, dp) {
         var i, x, y;
-        i = point*2;
-        x = pModel.shapeModel.meanShape[i/2][0];
-        y = pModel.shapeModel.meanShape[i/2][1];
-        for (var j = 0;j < pModel.shapeModel.numEvalues;j++) {
-            x += pModel.shapeModel.eigenVectors[i][j]*dp[j+4];
-            y += pModel.shapeModel.eigenVectors[i+1][j]*dp[j+4];            
+        i = point * 2;
+        x = pModel.shapeModel.meanShape[i / 2][0];
+        y = pModel.shapeModel.meanShape[i / 2][1];
+        for (var j = 0; j < pModel.shapeModel.numEvalues; j++) {
+            x += pModel.shapeModel.eigenVectors[i][j] * dp[j + 4];
+            y += pModel.shapeModel.eigenVectors[i + 1][j] * dp[j + 4];
         }
-        a = dp[0]*x - dp[1]*y + dp[2];
-        b = dp[0]*y + dp[1]*x + dp[3];
+        a = dp[0] * x - dp[1] * y + dp[2];
+        b = dp[0] * y + dp[1] * x + dp[3];
         x += a;
         y += b;
 
         canvasContext.beginPath();
-        canvasContext.arc(x, y, 5, 0, Math.PI*2, true);
+        canvasContext.arc(x, y, 5, 0, Math.PI * 2, true);
         canvasContext.closePath();
         canvasContext.fill();
     }
-    
-    var draw = function(canvas, pv) {
+
+    var draw = function (canvas, pv) {
         // if no previous points, just draw in the middle of canvas
         var params;
         if (pv === undefined) {
@@ -147,13 +132,14 @@ $(document).ready(() => {
             params = pv.slice(0);
         }
         var cc = canvas.getContext('2d');
-        cc.fillStyle = "rgb(0, 255, 0)";
-        cc.strokeStyle = "rgb(255, 255, 0)";
+        //cc.fillStyle = "#FFDAB9";
+                        
+        cc.strokeStyle = "#ffff00";
         //cc.lineWidth = 1;
         cc.save();
-        var paths = pModel.path.normal;
-        for (var i = 0;i < paths.length;i++) {
-            if (typeof(paths[i]) == 'number') {
+        var paths = pModel.path.vertices;
+        for (var i = 0; i < paths.length; i++) {
+            if (typeof (paths[i]) == 'number') {
                 drawPoint(cc, paths[i], params);
             } else {
                 drawPath(cc, paths[i], params);
